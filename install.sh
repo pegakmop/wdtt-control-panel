@@ -794,12 +794,14 @@ install_panel_files() {
   install -d -o wdtt-panel -g wdtt-panel -m 0750 "$STATE_DIR"
   install -d -o root -g root -m 0700 "$PRIVATE_STATE_DIR" "$PRIVATE_STATE_DIR/backups"
   install -d -m 0755 "$STATE_DIR/acme"
-  rm -rf "$INSTALL_DIR/wdtt_panel"
-  cp -a "$SCRIPT_DIR/wdtt_panel" "$INSTALL_DIR/wdtt_panel"
-  install -m 0755 "$SCRIPT_DIR/install.sh" "$INSTALL_DIR/install.sh"
-  install -m 0755 "$SCRIPT_DIR/bootstrap.sh" "$INSTALL_DIR/bootstrap.sh"
-  install -m 0755 "$SCRIPT_DIR/update.sh" "$INSTALL_DIR/update.sh"
-  install -m 0755 "$SCRIPT_DIR/uninstall.sh" "$INSTALL_DIR/uninstall.sh"
+  if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then
+    rm -rf "$INSTALL_DIR/wdtt_panel"
+    cp -a "$SCRIPT_DIR/wdtt_panel" "$INSTALL_DIR/wdtt_panel"
+    install -m 0755 "$SCRIPT_DIR/install.sh" "$INSTALL_DIR/install.sh"
+    install -m 0755 "$SCRIPT_DIR/bootstrap.sh" "$INSTALL_DIR/bootstrap.sh"
+    install -m 0755 "$SCRIPT_DIR/update.sh" "$INSTALL_DIR/update.sh"
+    install -m 0755 "$SCRIPT_DIR/uninstall.sh" "$INSTALL_DIR/uninstall.sh"
+  fi
   chown -R root:root "$INSTALL_DIR/wdtt_panel"
   find "$INSTALL_DIR/wdtt_panel" -type d -exec chmod 0755 {} +
   find "$INSTALL_DIR/wdtt_panel" -type f -exec chmod 0644 {} +

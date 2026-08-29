@@ -99,6 +99,14 @@ class InstallScriptTests(unittest.TestCase):
         self.assertIn("-bot-token-file", script)
         self.assertIn("/etc/wdtt/bot.token", script)
 
+        panel_files_start = script.index("install_panel_files() {")
+        panel_files = script[panel_files_start:script.index("write_maintenance_scripts() {", panel_files_start)]
+        self.assertIn('if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then', panel_files)
+        self.assertLess(
+            panel_files.index('if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then'),
+            panel_files.index('rm -rf "$INSTALL_DIR/wdtt_panel"'),
+        )
+
         patcher = (ROOT / "wdtt_panel" / "wdtt_server_patch.py").read_text(encoding="utf-8")
         self.assertIn('EXTENSION_MARKER = "wdtt-panel-extension-v9"', patcher)
         self.assertIn('json:"traffic_primary_bytes,omitempty"', patcher)
