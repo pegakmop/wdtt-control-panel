@@ -14,7 +14,7 @@ class WdttServerPatchTests(unittest.TestCase):
                 patch_spaceneurox_tree(Path(directory))
 
     @unittest.skipUnless(os.environ.get("QWDTT_SOURCE"), "set QWDTT_SOURCE for upstream integration test")
-    def test_patches_the_official_v1_4_2_tree_idempotently(self):
+    def test_patches_the_official_v1_4_3_tree_idempotently(self):
         source = Path(os.environ["QWDTT_SOURCE"]).resolve()
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory) / "qwdtt"
@@ -25,11 +25,15 @@ class WdttServerPatchTests(unittest.TestCase):
             extension = (work / "server" / "panel_extension.go").read_text(encoding="utf-8")
             database = (work / "server" / "database_bot.go").read_text(encoding="utf-8")
             connections = (work / "server" / "connections.go").read_text(encoding="utf-8")
+            raw = (work / "server" / "raw.go").read_text(encoding="utf-8")
+            wireguard = (work / "server" / "wireguard.go").read_text(encoding="utf-8")
             self.assertIn(EXTENSION_MARKER, extension)
             self.assertIn('json:"traffic_operations,omitempty"', database)
             self.assertIn('json:"main_down_bytes,omitempty"', database)
             self.assertIn("applyPasswordRestrictionsLocked", database)
             self.assertIn("DENIED:traffic_limit", connections)
+            self.assertIn("createBasicTUNFile", raw)
+            self.assertIn("createBasicTUNFile", wireguard)
 
 
 if __name__ == "__main__":

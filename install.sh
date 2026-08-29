@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-PANEL_VERSION="0.12.2"
+PANEL_VERSION="0.12.3"
 PANEL_REPOSITORY="${WDTT_PANEL_REPOSITORY:-lebrit/wdtt-control-panel}"
 PANEL_BRANCH="${WDTT_PANEL_BRANCH:-main}"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -45,12 +45,12 @@ WDTT_MAIN_PASSWORD="${WDTT_MAIN_PASSWORD:-}"
 WDTT_TELEGRAM_BOT_TOKEN="${WDTT_TELEGRAM_BOT_TOKEN:-}"
 WDTT_TELEGRAM_ADMIN_ID="${WDTT_TELEGRAM_ADMIN_ID:-}"
 WDTT_REPOSITORY="${WDTT_REPOSITORY:-SpaceNeuroX/proxy-turn-vk-android}"
-WDTT_REF="${WDTT_REF:-v1.4.2}"
+WDTT_REF="${WDTT_REF:-v1.4.3}"
 GO_VERSION="${GO_VERSION:-1.25.0}"
 WDTT_SERVICE="wdtt.service"
 WDTT_EXTENSIONS_SERVICE="wdtt-panel-wdtt-extensions.service"
 WDTT_EXTENSIONS_TIMER="wdtt-panel-wdtt-extensions.timer"
-WDTT_EXTENSION_MARKER="wdtt-panel-extension-v8"
+WDTT_EXTENSION_MARKER="wdtt-panel-extension-v9"
 
 log() { printf '[wdtt-panel] %s\n' "$*" | tee -a "$LOG_FILE"; }
 die() { log "ERROR: $*"; exit 1; }
@@ -511,7 +511,7 @@ install_wdtt_extensions() {
   if [ "$WDTT_REPOSITORY" = "SpaceNeuroX/proxy-turn-vk-android" ]; then
     python3 "$SCRIPT_DIR/wdtt_panel/wdtt_server_patch.py" "$source" || die "Не удалось адаптировать qWDTT $WDTT_REF для панели"
   else
-  die "Расширение панели 0.12.2 поддерживает только SpaceNeuroX/proxy-turn-vk-android v1.4.2"
+  die "Расширение панели 0.12.3 поддерживает только SpaceNeuroX/proxy-turn-vk-android v1.4.3"
   python3 - "$source/server.go" <<'PY'
 import re
 import sys
@@ -528,7 +528,7 @@ def replace_once(old, new, title):
 
 replace_once(
     'func main() {\n',
-    'const wdttPanelExtensionMarker = "wdtt-panel-extension-v8"\n\nfunc main() {\n\tlog.Printf("[WDTT Panel] extension %s enabled", wdttPanelExtensionMarker)\n',
+    'const wdttPanelExtensionMarker = "wdtt-panel-extension-v9"\n\nfunc main() {\n\tlog.Printf("[WDTT Panel] extension %s enabled", wdttPanelExtensionMarker)\n',
     "extension marker",
 )
 
@@ -773,7 +773,7 @@ PY
     die "После обновления WDTT обнаружена потеря пользователей, устройств или данных квот; прежний бинарный файл и база восстановлены"
   fi
   rm -f "$PRIVATE_STATE_DIR/user-labels.json"
-  printf '{"enabled_at": %s, "marker": "%s", "wdtt_repository": "%s", "wdtt_ref": "%s", "features": ["labels", "main_traffic", "activity", "traffic_quota", "retained_expired", "spaceneurox_v1_4_2"]}\n' "$(date +%s)" "$WDTT_EXTENSION_MARKER" "$WDTT_REPOSITORY" "$WDTT_REF" > "$PRIVATE_STATE_DIR/wdtt-extensions.json"
+  printf '{"enabled_at": %s, "marker": "%s", "wdtt_repository": "%s", "wdtt_ref": "%s", "features": ["labels", "main_traffic", "activity", "traffic_quota", "retained_expired", "spaceneurox_v1_4_3"]}\n' "$(date +%s)" "$WDTT_EXTENSION_MARKER" "$WDTT_REPOSITORY" "$WDTT_REF" > "$PRIVATE_STATE_DIR/wdtt-extensions.json"
   chmod 0600 "$PRIVATE_STATE_DIR/wdtt-extensions.json"
   log "Расширение WDTT включено: метки общие с Telegram-ботом, трафик и последняя активность пользователей учитываются"
 }

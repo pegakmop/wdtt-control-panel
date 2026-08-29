@@ -4,8 +4,8 @@ import sys
 from pathlib import Path
 
 
-EXTENSION_MARKER = "wdtt-panel-extension-v8"
-SUPPORTED_LAYOUT = "SpaceNeuroX qWDTT v1.4.2"
+EXTENSION_MARKER = "wdtt-panel-extension-v9"
+SUPPORTED_LAYOUT = "SpaceNeuroX qWDTT v1.4.3"
 
 
 def _replace_once(source: str, old: str, new: str, title: str) -> str:
