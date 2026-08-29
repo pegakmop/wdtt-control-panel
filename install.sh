@@ -791,7 +791,7 @@ install_panel_files() {
   [ -d "$SCRIPT_DIR/wdtt_panel" ] || die "Каталог wdtt_panel не найден рядом с install.sh"
   id -u wdtt-panel >/dev/null 2>&1 || useradd --system --home-dir "$STATE_DIR" --create-home --shell /usr/sbin/nologin wdtt-panel
   install -d -m 0755 "$INSTALL_DIR" "$CONFIG_DIR"
-  install -d -o wdtt-panel -g wdtt-panel -m 0750 "$STATE_DIR"
+  install -d -o wdtt-panel -g wdtt-panel -m 0755 "$STATE_DIR"
   install -d -o root -g root -m 0700 "$PRIVATE_STATE_DIR" "$PRIVATE_STATE_DIR/backups"
   install -d -m 0755 "$STATE_DIR/acme"
   if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then

@@ -102,6 +102,7 @@ class InstallScriptTests(unittest.TestCase):
         panel_files_start = script.index("install_panel_files() {")
         panel_files = script[panel_files_start:script.index("write_maintenance_scripts() {", panel_files_start)]
         self.assertIn('if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then', panel_files)
+        self.assertIn('install -d -o wdtt-panel -g wdtt-panel -m 0755 "$STATE_DIR"', panel_files)
         self.assertLess(
             panel_files.index('if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then'),
             panel_files.index('rm -rf "$INSTALL_DIR/wdtt_panel"'),
